@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mała Stolarnia | Meble na Wymiar i Projekty Wnętrz</title>
+    <meta name="description" content="Projektujemy i budujemy meble na wymiar. Dojeżdżamy do klienta, robimy pomiary i tworzymy unikalne wnętrza. Mała Stolarnia - Twoje meble.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#1a1a1a', 
+                            dark: '#262626',
+                            beige: '#f4f0eb', 
+                            gold: '#c6a87c', // Twój złoty kolor z logo
+                            gray: '#fcfcfb'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Manrope', 'sans-serif'],
+                        serif: ['Times New Roman', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fcfcfb; color: #1a1a1a; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+
+        /* Animacja Hero */
+        .hero-bg { background-color: #1a1a1a; position: relative; overflow: hidden; }
+        .blueprint-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px; opacity: 0.5;
+        }
+        .sketch-path { fill: none; stroke: rgba(255, 255, 255, 0.8); stroke-width: 1.5; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: dash 4s linear forwards infinite; }
+        .sketch-dim { stroke: rgba(198, 168, 124, 0.6); stroke-width: 1; stroke-dasharray: 5, 5; opacity: 0; animation: fadeInDim 4s ease-out forwards infinite; }
+        @keyframes dash { 0% { stroke-dashoffset: 1000; opacity: 0; } 10% { opacity: 1; } 80% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+        @keyframes fadeInDim { 0% { opacity: 0; } 50% { opacity: 0; } 70% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* Nawigacja */
+        .scrolled-nav { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); padding-top: 1rem !important; padding-bottom: 1rem !important; }
+        .scrolled-nav .logo-text, .scrolled-nav .nav-link, .scrolled-nav #mobile-menu-btn { color: #1a1a1a !important; }
+        .scrolled-nav .svg-logo-fill { fill: #c6a87c !important; }
+
+        /* FLIP CARDS */
+        .flip-card { background-color: transparent; width: 100%; height: 500px; perspective: 1000px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s; transform-style: preserve-3d; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; }
+        .flip-card-front { background-color: #ffffff; color: #1a1a1a; border: 1px solid #f3f3f3; }
+        .flip-card-back { background-color: #1a1a1a; color: white; transform: rotateY(180deg); background-size: cover; background-position: center; }
+        .flip-card-back::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.7); z-index: 1; }
+        .flip-card-back > * { position: relative; z-index: 2; }
+        .flip-icon { font-size: 3.5rem; margin-bottom: 1.5rem; color: #c6a87c; transition: transform 0.3s ease; }
+        .flip-card:hover .flip-icon { transform: scale(1.1); }
+
+        /* REALIZACJE */
+        .realization-card {
+            background-color: #262626; 
+            position: relative;
+            overflow: hidden;
+        }
+        .realization-img {
+            transition: transform 0.7s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .realization-card:hover .realization-img {
+            transform: scale(1.1);
+        }
+        .realization-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%);
+            z-index: 5;
+        }
+
+        /* Ukrywanie obrazka w przypadku błędu ładowania (dla logo) */
+        .logo-img { display: block; }
+        .logo-svg { display: none; }
+        .img-error { display: none !important; }
+        .img-error + .logo-svg { display: block !important; }
+
+        /* Filtr dla logo w stopce - zamienia czarny na srebrny */
+        .footer-logo-img {
+            filter: brightness(0) invert(0.8);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- NAVIGATION -->
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 py-6 text-white bg-transparent">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- LOGO: Próba ładowania pliku, fallback do SVG -->
+            <a href="#" class="flex items-center gap-2 group h-14 w-auto">
+                <img src="logo.png" alt="Mała Stolarnia" class="h-full w-auto object-contain logo-img" onerror="this.classList.add('img-error');">
+                
+                <!-- Fallback SVG Logo (wyświetli się, jeśli brak pliku logo.png) -->
+                <svg viewBox="0 0 300 100" class="h-full w-auto logo-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <text x="10" y="70" font-family="'Times New Roman', serif" font-size="80" fill="#c6a87c" class="svg-logo-fill transition-colors duration-300">M</text>
+                    <text x="160" y="70" font-family="'Times New Roman', serif" font-size="80" fill="#c6a87c" class="svg-logo-fill transition-colors duration-300">S</text>
+                    <line x1="135" y1="10" x2="135" y2="90" stroke="#c6a87c" stroke-width="2" class="svg-logo-fill transition-colors duration-300"/>
+                    <text x="75" y="55" font-family="'Manrope', sans-serif" font-size="16" letter-spacing="2" fill="currentColor" text-anchor="middle" font-weight="bold">MAŁA</text>
+                    <text x="225" y="55" font-family="'Manrope', sans-serif" font-size="16" letter-spacing="2" fill="currentColor" text-anchor="middle" font-weight="bold">STOLARNIA</text>
+                </svg>
+            </a>
+            
+            <nav class="hidden md:flex gap-8 items-center">
+                <a href="#proces" class="nav-link text-sm font-medium hover:text-brand-gold transition-colors tracking-widest uppercase">Proces</a>
+                <a href="#oferta" class="nav-link text-sm font-medium hover:text-brand-gold transition-colors tracking-widest uppercase">Oferta</a>
+                <a href="#realizacje" class="nav-link text-sm font-medium hover:text-brand-gold transition-colors tracking-widest uppercase">Realizacje</a>
+                <a href="#kontakt" class="nav-link px-6 py-2 border border-current rounded-none font-bold text-sm tracking-widest hover:bg-brand-gold hover:border-brand-gold hover:text-white transition-all uppercase">Kontakt</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars nav-link"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 bg-brand-black bg-opacity-95 z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8 md:hidden">
+            <button id="close-menu-btn" class="absolute top-6 right-6 text-white text-3xl">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <a href="#proces" class="text-2xl text-white font-display font-bold hover:text-brand-gold" onclick="toggleMenu()">PROCES</a>
+            <a href="#oferta" class="text-2xl text-white font-display font-bold hover:text-brand-gold" onclick="toggleMenu()">OFERTA</a>
+            <a href="#realizacje" class="text-2xl text-white font-display font-bold hover:text-brand-gold" onclick="toggleMenu()">REALIZACJE</a>
+            <a href="#kontakt" class="text-2xl text-white font-display font-bold hover:text-brand-gold" onclick="toggleMenu()">KONTAKT</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero-bg relative h-screen flex items-center justify-center text-center px-4">
+        <div class="blueprint-grid"></div>
+        <!-- Animacja mebla (Szkic SVG) -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
+            <svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full md:w-3/4 md:h-3/4">
+                <rect x="200" y="100" width="400" height="400" rx="4" class="sketch-path" style="animation-delay: 0s;" />
+                <line x1="333" y1="100" x2="333" y2="500" class="sketch-path" style="animation-delay: 0.5s;" />
+                <line x1="200" y1="200" x2="333" y2="200" class="sketch-path" style="animation-delay: 1s;" />
+                <line x1="200" y1="300" x2="333" y2="300" class="sketch-path" style="animation-delay: 1.2s;" />
+                <line x1="200" y1="400" x2="333" y2="400" class="sketch-path" style="animation-delay: 1.4s;" />
+                <line x1="333" y1="150" x2="600" y2="150" class="sketch-path" style="animation-delay: 2s;" /> 
+                <line x1="350" y1="180" x2="580" y2="180" class="sketch-path" style="animation-delay: 2.4s;" stroke-width="3" /> 
+                <rect x="333" y="400" width="267" height="50" class="sketch-path" style="animation-delay: 3s;" />
+                <text x="140" y="300" fill="#c6a87c" font-size="12" class="sketch-dim" style="animation-delay: 3.5s; font-family: monospace;">2200mm</text>
+            </svg>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="block text-brand-gold tracking-[0.3em] text-sm uppercase mb-4 animate-pulse">Od projektu do montażu</span>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 leading-tight">
+                Twoje Wnętrze.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Na Wymiar.</span>
+            </h1>
+            <p class="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                Tworzymy meble dopasowane do Twojego stylu życia. Profesjonalny pomiar, unikalny projekt i solidne wykonanie.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#kontakt" class="btn-custom bg-white text-brand-black px-10 py-4 font-bold text-sm tracking-widest hover:bg-brand-gold hover:text-white transition-colors uppercase">
+                    Darmowa wycena
+                </a>
+                <a href="#realizacje" class="btn-custom border border-white text-white px-10 py-4 font-bold text-sm tracking-widest hover:bg-white hover:text-brand-black transition-colors uppercase">
+                    Zobacz realizacje
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCES -->
+    <section id="proces" class="py-24 bg-brand-beige">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20">
+                <span class="text-brand-gold font-bold tracking-widest text-xs uppercase mb-2 block">Jak działamy</span>
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-brand-black mb-4">Proces realizacji</h2>
+                <div class="h-1 w-24 bg-brand-gold mx-auto mt-6"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div class="group">
+                    <div class="w-24 h-24 mx-auto rounded-full border-2 border-brand-black flex items-center justify-center text-4xl mb-6 group-hover:bg-brand-gold group-hover:border-brand-gold group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 font-display">1. Pomiar</h3>
+                    <p class="text-gray-600 leading-relaxed px-4">Spotykamy się u Ciebie. Dokonujemy precyzyjnych pomiarów laserowych i omawiamy Twoje oczekiwania.</p>
+                </div>
+                <div class="group">
+                    <div class="w-24 h-24 mx-auto rounded-full border-2 border-brand-black flex items-center justify-center text-4xl mb-6 group-hover:bg-brand-gold group-hover:border-brand-gold group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-pen-ruler"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 font-display">2. Projekt</h3>
+                    <p class="text-gray-600 leading-relaxed px-4">Przygotowujemy wizualizację i wycenę. Dobieramy materiały, okucia i rozwiązania funkcjonalne.</p>
+                </div>
+                <div class="group">
+                    <div class="w-24 h-24 mx-auto rounded-full border-2 border-brand-black flex items-center justify-center text-4xl mb-6 group-hover:bg-brand-gold group-hover:border-brand-gold group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-hammer"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 font-display">3. Montaż</h3>
+                    <p class="text-gray-600 leading-relaxed px-4">Produkujemy meble w naszej stolarni i montujemy je u Ciebie. Czysto, sprawnie i na lata.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OFERTA (FLIP CARDS) - GENEROWANE AUTOMATYCZNIE -->
+    <section id="oferta" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-display font-bold text-brand-gold mb-2">Design i Trwałość</h2>
+                    <h2 class="text-4xl md:text-6xl font-display font-bold text-brand-black">Na wysokim poziomie</h2>
+                </div>
+                <div class="md:w-1/3">
+                    <p class="text-gray-600 text-lg leading-relaxed">
+                        Nasze meble wyróżniają się niepowtarzalnym stylem i odpornością na uszkodzenia. Wybierając nas, inwestujesz w jakość na lata.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kontener na karty oferty generowany przez JS -->
+            <div id="offer-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Tu pojawią się karty z konfiguracji na dole -->
+            </div>
+        </div>
+    </section>
+
+    <!-- REALIZACJE (GENEROWANE AUTOMATYCZNIE PRZEZ JAVASCRIPT) -->
+    <section id="realizacje" class="py-24 bg-brand-beige">
+        <div class="container mx-auto px-6">
+             <div class="text-center mb-16">
+                <span class="text-brand-gold font-bold tracking-widest text-xs uppercase mb-2 block">Portfolio</span>
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-brand-black">Nasze Realizacje</h2>
+            </div>
+
+            <!-- Kontener na zdjęcia generowany przez JS (id="portfolio-grid") -->
+            <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Tu automatycznie pojawią się zdjęcia z listy na dole strony -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="relative py-32 bg-fixed bg-center bg-cover" style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
+        <div class="absolute inset-0 bg-brand-black bg-opacity-70"></div>
+        <div class="relative z-10 container mx-auto px-6 text-center text-white">
+            <h2 class="text-3xl md:text-5xl font-display font-bold mb-6">Masz pomysł na swoje wnętrze?</h2>
+            <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto text-gray-300 font-light">
+                Skontaktuj się z nami. Pomożemy Ci przekuć wizję w rzeczywistość, dbając o każdy detal wykonania.
+            </p>
+            <a href="#kontakt" class="bg-white text-brand-black px-12 py-4 font-bold text-sm tracking-widest hover:bg-brand-gold hover:text-white transition-colors uppercase inline-block">
+                Umów pomiar
+            </a>
+        </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section id="kontakt" class="bg-brand-black text-white py-24">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <!-- Lewa kolumna: Dane -->
+                <div>
+                    <div class="mb-10">
+                         <!-- Logo w stopce - Identyczne jak w nagłówku, ale z srebrnym tekstem -->
+                         <a href="#" class="h-14 w-auto block">
+                            <!-- Klasa footer-logo-img zamienia czarny kolor w PNG na srebrny -->
+                            <img src="logo.png" alt="Mała Stolarnia" class="h-full w-auto object-contain logo-img footer-logo-img" onerror="this.classList.add('img-error');">
+                            
+                            <!-- SVG Fallback - Pełne logo z napisami w kolorze srebrnym (#d1d5db) -->
+                            <svg viewBox="0 0 300 100" class="h-full w-auto logo-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <text x="10" y="70" font-family="'Times New Roman', serif" font-size="80" fill="#c6a87c">M</text>
+                                <text x="160" y="70" font-family="'Times New Roman', serif" font-size="80" fill="#c6a87c">S</text>
+                                <line x1="135" y1="10" x2="135" y2="90" stroke="#c6a87c" stroke-width="2"/>
+                                <!-- Napisy MAŁA STOLARNIA w kolorze srebrnym -->
+                                <text x="75" y="55" font-family="'Manrope', sans-serif" font-size="16" letter-spacing="2" fill="#d1d5db" text-anchor="middle" font-weight="bold">MAŁA</text>
+                                <text x="225" y="55" font-family="'Manrope', sans-serif" font-size="16" letter-spacing="2" fill="#d1d5db" text-anchor="middle" font-weight="bold">STOLARNIA</text>
+                            </svg>
+                         </a>
+                    </div>
+                    
+                    <p class="text-gray-400 mb-10 max-w-md text-lg font-light leading-relaxed">
+                        Tworzymy meble z pasją i precyzją. Jesteśmy małą manufakturą, dla której liczy się jakość, a nie ilość.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-6 group">
+                            <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center text-brand-gold group-hover:border-brand-gold transition-colors">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs uppercase tracking-widest text-gray-500 mb-1">Telefon</p>
+                                <a href="tel:+48665248197" class="text-xl font-bold hover:text-brand-gold transition-colors">+48 665 248 197</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group">
+                            <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center text-brand-gold group-hover:border-brand-gold transition-colors">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs uppercase tracking-widest text-gray-500 mb-1">Email</p>
+                                <a href="mailto:kontakt@malastolarnia.pl" class="text-xl font-bold hover:text-brand-gold transition-colors">kontakt@malastolarnia.pl</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group">
+                            <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center text-brand-gold group-hover:border-brand-gold transition-colors">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs uppercase tracking-widest text-gray-500 mb-1">Adres</p>
+                                <p class="text-xl font-bold">Wrocław, Kalisz i okolice</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prawa kolumna: Formularz -->
+                <div class="bg-brand-dark p-10 rounded-none border border-gray-800">
+                    <h3 class="text-2xl font-bold mb-8 font-display">Napisz do nas</h3>
+                    <!-- WAŻNE: Zmień TWOJ_EMAIL@DOMENA.PL na swój prawdziwy adres email w atrybucie action poniżej -->
+                    <form action="https://formsubmit.co/aneta.ciupa@gmail.com" method="POST" id="contactForm" class="space-y-6">
+                        <!-- Konfiguracja FormSubmit -->
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_subject" value="Nowa wiadomość ze strony Mała Stolarnia">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Imię</label>
+                                <input type="text" name="imie" required class="w-full bg-brand-black border border-gray-700 p-4 text-white focus:outline-none focus:border-brand-gold transition-colors placeholder-gray-600" placeholder="Jan Kowalski">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Telefon</label>
+                                <input type="tel" name="telefon" required class="w-full bg-brand-black border border-gray-700 p-4 text-white focus:outline-none focus:border-brand-gold transition-colors placeholder-gray-600" placeholder="+48...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Rodzaj mebli</label>
+                            <select name="rodzaj" class="w-full bg-brand-black border border-gray-700 p-4 text-white focus:outline-none focus:border-brand-gold transition-colors">
+                                <option>Kuchnia na wymiar</option>
+                                <option>Szafa wnękowa / Garderoba</option>
+                                <option>Meble łazienkowe</option>
+                                <option>Biuro / Inne</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Wiadomość</label>
+                            <textarea name="wiadomosc" required rows="4" class="w-full bg-brand-black border border-gray-700 p-4 text-white focus:outline-none focus:border-brand-gold transition-colors placeholder-gray-600" placeholder="Opisz krótko swój projekt..."></textarea>
+                        </div>
+                        <button type="submit" id="submitBtn" class="w-full bg-white text-brand-black font-bold py-5 hover:bg-brand-gold hover:text-white transition-all uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed">
+                            Wyślij wiadomość
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-20 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <p>&copy; 2025 Mała Stolarnia. Wszelkie prawa zastrzeżone.</p>
+                <div class="flex gap-8 mt-4 md:mt-0 text-lg">
+                    <a href="#" class="hover:text-brand-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="hover:text-brand-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // ==========================================
+        // KONFIGURACJA SEKCJI "OFERTA" (Flip Cards)
+        // ==========================================
+        
+        // Tutaj edytujesz kafelki, które się obracają.
+        // icon: nazwa ikony z FontAwesome (np. fa-utensils, fa-couch, fa-shirt)
+        // title: Tytuł kafelka
+        // descFront: Opis widoczny od razu (przód)
+        // descBack: Opis widoczny po najechaniu (tył)
+        // imgSrc: Twoje zdjęcie w tle (lokalne)
+        // fallbackSrc: Zdjęcie zapasowe z internetu
+
+        const offerItems = [
+            {
+                icon: "fa-utensils",
+                title: "Kuchnie",
+                descFront: "Serce domu w najlepszym wydaniu. Trwałe blaty, systemy cichego domyku i ergonomia, która sprawia, że gotowanie to przyjemność.",
+                descBack: "Tworzymy kuchnie marzeń. Od nowoczesnych, minimalistycznych frontów po klasyczne frezowania. Pełna zabudowa AGD.",
+                imgSrc: "kuchnia.png", 
+                fallbackSrc: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                icon: "fa-couch",
+                title: "Zabudowa",
+                descFront: "Inteligentne wykorzystanie przestrzeni. Szafy wnękowe, zabudowy RTV, biblioteczki i meble łazienkowe odporne na wilgoć.",
+                descBack: "Każdy centymetr ma znaczenie. Projektujemy zabudowy, które idealnie wpisują się w skosy i wnęki Twojego mieszkania.",
+                imgSrc: "wnekowe.png",
+                fallbackSrc: "https://images.unsplash.com/photo-1558603668-6570496b66f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                icon: "fa-shirt",
+                title: "Garderoba",
+                descFront: "Porządek i elegancja. Funkcjonalne systemy szuflad, wieszaków i oświetlenia LED, które eksponują Twoją kolekcję ubrań.",
+                descBack: "Garderoby typu Walk-in. Przemyślany układ półek i drążków zapewnia łatwy dostęp i doskonałą organizację Twoich rzeczy.",
+                imgSrc: "garderoba.png",
+                fallbackSrc: "https://images.unsplash.com/photo-1584622050111-993a426fbf0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            }
+        ];
+
+        // ==========================================
+        // KONFIGURACJA PORTFOLIO (Realizacje)
+        // ==========================================
+        
+        const portfolioItems = [
+            {
+                title: "Kuchnie",
+                imgSrc: "kuchnia.png", 
+                fallbackSrc: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                title: "Szafy Wnękowe",
+                imgSrc: "wnekowe.png",
+                fallbackSrc: "https://images.unsplash.com/photo-1558603668-6570496b66f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                title: "Garderoby",
+                imgSrc: "garderoba.png",
+                fallbackSrc: "https://images.unsplash.com/photo-1584622050111-993a426fbf0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                title: "Biuro",
+                imgSrc: "biuro.png",
+                fallbackSrc: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            // Dodaj kolejne zdjęcia tutaj...
+        ];
+
+
+        // ==========================================
+        // FUNKCJE RENDERUJĄCE (Nie trzeba zmieniać)
+        // ==========================================
+
+        function renderOffer() {
+            const container = document.getElementById('offer-grid');
+            if (!container) return;
+            
+            offerItems.forEach(item => {
+                const cardHTML = `
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fa-solid ${item.icon} flip-icon"></i>
+                            <h3 class="text-3xl font-bold font-display mb-4">${item.title}</h3>
+                            <div class="w-12 h-1 bg-brand-gold mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed px-4">
+                                ${item.descFront}
+                            </p>
+                        </div>
+                        <div class="flip-card-back" style="background-image: url('${item.imgSrc}'), url('${item.fallbackSrc}');">
+                            <i class="fa-solid ${item.icon} flip-icon text-white"></i>
+                            <h3 class="text-3xl font-bold font-display mb-4">${item.title}</h3>
+                            <div class="w-12 h-1 bg-brand-gold mb-6"></div>
+                            <p class="text-gray-200 leading-relaxed px-4">
+                                ${item.descBack}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        function renderPortfolio() {
+            const container = document.getElementById('portfolio-grid');
+            if (!container) return;
+
+            portfolioItems.forEach(item => {
+                const cardHTML = `
+                <div class="group relative h-[400px] md:h-[500px] cursor-pointer realization-card">
+                    <img src="${item.imgSrc}" onerror="if(this.src != '${item.fallbackSrc}') this.src='${item.fallbackSrc}'" class="realization-img" alt="${item.title}">
+                    <div class="absolute inset-0 realization-overlay opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
+                    <div class="absolute bottom-8 left-8 text-white z-10">
+                        <h3 class="text-3xl font-bold font-display tracking-wide">${item.title}</h3>
+                        <div class="h-1 w-12 bg-brand-gold mt-2 group-hover:w-24 transition-all duration-300"></div>
+                    </div>
+                </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderOffer();
+            renderPortfolio();
+            // Wywołaj aktualizację paska od razu po załadowaniu treści
+            updateNavbar();
+        });
+
+
+        // ==========================================
+        // LOGIKA NAWIGACJI (ZMIANA KOLORU NA GRANICY SEKCJI)
+        // ==========================================
+        const navbar = document.getElementById('navbar');
+        const heroSection = document.getElementById('hero'); // Sekcja Hero
+
+        function updateNavbar() {
+            if (!heroSection) return;
+
+            // Obliczamy wysokość sekcji Hero i aktualną wysokość paska nawigacji
+            const heroHeight = heroSection.offsetHeight;
+            const navHeight = navbar.offsetHeight;
+
+            // Logika: Zmień kolor, gdy dolna krawędź paska (scrollY + navHeight) 
+            // przekroczy dolną krawędź sekcji Hero (heroHeight).
+            // Odejmujemy mały margines (20px), aby przejście zaczęło się ciut wcześniej dla płynności oka.
+            if (window.scrollY + navHeight > heroHeight - 20) {
+                navbar.classList.add('scrolled-nav');
+                navbar.classList.remove('bg-transparent', 'text-white');
+                navbar.classList.add('text-brand-black');
+            } else {
+                navbar.classList.remove('scrolled-nav');
+                navbar.classList.add('bg-transparent', 'text-white');
+                navbar.classList.remove('text-brand-black');
+            }
+        }
+
+        window.addEventListener('scroll', updateNavbar);
+        window.addEventListener('resize', updateNavbar); // Aktualizuj też przy zmianie rozmiaru okna
+
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Obsługa formularza kontaktowego (AJAX)
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Pobranie adresu email z action
+            const actionUrl = contactForm.getAttribute('action');
+            if(actionUrl.includes('TWOJ_EMAIL')) {
+                alert('Pamiętaj, aby w kodzie strony zmienić "TWOJ_EMAIL@DOMENA.PL" na swój prawdziwy adres email!');
+                return;
+            }
+
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = 'Wysyłanie...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(contactForm);
+
+            fetch(actionUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    submitBtn.innerText = 'Wiadomość Wysłana!';
+                    submitBtn.classList.remove('bg-white', 'text-brand-black', 'hover:bg-brand-gold');
+                    submitBtn.classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
+                    contactForm.reset();
+                    
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalBtnText;
+                        submitBtn.classList.remove('bg-green-600', 'text-white', 'hover:bg-green-700');
+                        submitBtn.classList.add('bg-white', 'text-brand-black', 'hover:bg-brand-gold');
+                    }, 5000);
+                } else {
+                    alert('Wystąpił błąd podczas wysyłania. Spróbuj ponownie.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalBtnText;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Wystąpił błąd połączenia.');
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText;
+            });
+        });
+    </script>
+</body>
+</html>
